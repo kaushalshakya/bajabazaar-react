@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { toastTheme } from "../../components/toast";
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -57,9 +58,11 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <label className="label">
-                <a href="#" className="label-text-alt link link-hover">
-                  Forgot password?
-                </a>
+                <Link to={"/vendor/login"}>
+                  <a href="#" className="label-text-alt link link-hover">
+                    Login as vendor
+                  </a>
+                </Link>
               </label>
             </div>
             <div className="form-control mt-6">

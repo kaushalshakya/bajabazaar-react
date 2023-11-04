@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import logo from "/logo.png";
 import { Link } from "react-router-dom";
 import Cart from "./Cart";
+import useAuthStore from "../global/authStore";
+import defaultProfile from "/defaultProfile.jpg";
+import ConfirmLogout from "./ConfirmLogout";
 
 const Navbar = ({ children }) => {
   const [logout, setLogout] = useState(false);
-  const user = null;
+  const user = useAuthStore((state) => state.user);
+  console.log(user);
   return (
     <>
       <div className="drawer flex flex-col max-w-screen">
@@ -76,14 +80,12 @@ const Navbar = ({ children }) => {
                     className="btn btn-ghost btn-circle avatar"
                   >
                     <div className="w-10 rounded-full">
-                      <img src={defaultProfile} />
+                      <img src={user.image ? user.image : defaultProfile} />
                     </div>
                   </label>
                   <ul
                     tabIndex={0}
-                    className={`mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content  ${
-                      theme === "dark" ? "text-white" : "text-primary"
-                    }  rounded-box w-52`}
+                    className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content text-primary rounded-box w-52"
                   >
                     <li>
                       <Link to={"/profile"}>
@@ -181,12 +183,7 @@ const Navbar = ({ children }) => {
           </ul>
         </div>
       </div>
-      {logout && (
-        <ConfirmLogout
-          setLogout={setLogout}
-          setAuthenticated={setAuthenticated}
-        />
-      )}
+      {logout && <ConfirmLogout setLogout={setLogout} />}
     </>
   );
 };

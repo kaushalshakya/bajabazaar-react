@@ -2,23 +2,68 @@ import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { toastTheme } from "../../components/toast";
 import "react-toastify/dist/ReactToastify.css";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import useAuthStore from "../../global/authStore";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const VendorLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const loginMutation = async (payload) => {
+    const response = await axios.post(
+      import.meta.env.VITE_api_url + "vendor-auth/login",
+      payload
+    );
+    return response.data;
+  };
+
+  const { setIsAuthenticated, setUser, setToken } = useAuthStore();
+
+  const mutation = useMutation({
+    mutationFn: loginMutation,
+    onSuccess: (data) => {
+      toast.success(data.message, toastTheme);
+      const user = jwtDecode(data.accessToken);
+      setIsAuthenticated(true);
+      setToken(data.accessToken);
+      setUser(user);
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    },
+    onError: (error) => {
+      console.log("jere");
+      console.log(error);
+      toast.error(error.response.data.message, toastTheme);
+    },
+  });
 
   const handleLogin = (e) => {
     e.preventDefault();
+
     if (!email) {
       return toast.error("Email is required", toastTheme);
     }
+
     if (!password) {
       return toast.error("Password is required", toastTheme);
     }
+
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!regex.test(email)) {
       return toast.error("Email is invalid", toastTheme);
     }
+
+    const payload = {
+      email,
+      password,
+    };
+
+    mutation.mutate(payload);
   };
 
   return (
