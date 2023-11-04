@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import logo from "/logo.png";
-import cart from "/shopping-cart.png";
 import { Link } from "react-router-dom";
+import Cart from "../pages/Cart";
 
 const Navbar = ({ children }) => {
   const [logout, setLogout] = useState(false);
@@ -41,7 +41,7 @@ const Navbar = ({ children }) => {
                 <Link to={"/"}>
                   <li className="text-base cursor-pointer">Home</li>
                 </Link>
-                <Link to={"/privacy-policy"}>
+                <Link to={"/products"}>
                   <li className="text-base cursor-pointer">All Products</li>
                 </Link>
                 <div className="form-control">
@@ -68,7 +68,7 @@ const Navbar = ({ children }) => {
                   </button>
                 </Link>
               )}
-              <img src={cart} className="w-7" alt="" />
+              <Cart />
               {user ? (
                 <div className="dropdown dropdown-end">
                   <label

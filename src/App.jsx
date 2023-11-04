@@ -4,9 +4,11 @@ import Routes from "./Routes/Routes";
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Routes />
-      </BrowserRouter>
+      <div className="bg-base-200">
+        <BrowserRouter>
+          <Routes />
+        </BrowserRouter>
+      </div>
     </>
   );
 }
