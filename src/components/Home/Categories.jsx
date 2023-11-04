@@ -15,9 +15,8 @@ const Categories = () => {
     },
   });
 
-  console.log(data);
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 items-center">
       <h1 className="text-3xl font-bold">Our Categories</h1>
       {isLoading && <Loader />}
       {error && <Error message={error.message} />}

@@ -22,7 +22,7 @@ const VendorLogin = () => {
   };
 
   return (
-    <div className="hero bg-base-200 pt-32">
+    <div className="hero  pt-32">
       <ToastContainer />
       <div className="hero-content flex-col lg:flex-row items-center justify-between gap-[20rem]">
         <div className="text-center lg:text-left w-full">

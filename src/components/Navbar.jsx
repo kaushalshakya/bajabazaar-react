@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import logo from "/logo.png";
 import { Link } from "react-router-dom";
-import Cart from "../pages/Cart";
+import Cart from "./Cart";
 
 const Navbar = ({ children }) => {
   const [logout, setLogout] = useState(false);
@@ -11,7 +11,7 @@ const Navbar = ({ children }) => {
       <div className="drawer flex flex-col max-w-screen">
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col">
-          <div className="flex items-center lg:border lg:border-base-300 z-20 lg:fixed lg:top-0 lg:w-screen justify-between bg-base-100 p-[1rem] ">
+          <div className="flex items-center lg:border z-20 lg:fixed lg:top-0 lg:w-screen justify-between bg-base-100 p-[1rem] ">
             <div className="flex flex-row lg:hidden">
               <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
                 <svg
@@ -81,7 +81,7 @@ const Navbar = ({ children }) => {
                   </label>
                   <ul
                     tabIndex={0}
-                    className={`mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 ${
+                    className={`mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content  ${
                       theme === "dark" ? "text-white" : "text-primary"
                     }  rounded-box w-52`}
                   >
@@ -113,7 +113,7 @@ const Navbar = ({ children }) => {
         </div>
         <div className="drawer-side z-40">
           <label htmlFor="my-drawer-3" className="drawer-overlay"></label>
-          <ul className="menu p-4 w-80 min-h-full bg-base-200 text-primary font-normal normal-case">
+          <ul className="menu p-4 w-80 min-h-full  text-primary font-normal normal-case">
             <Link to={"/"}>
               <li className="cursor-pointer rounded-full">
                 {" "}

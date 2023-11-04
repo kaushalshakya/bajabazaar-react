@@ -48,7 +48,7 @@ const Register = () => {
     return toast.success("Register", toastTheme);
   };
   return (
-    <div className="hero bg-base-200">
+    <div className="hero ">
       <ToastContainer />
       <div className="hero-content flex-col lg:flex-row items-center justify-between gap-[20rem]">
         <div className="text-center lg:text-left w-full">

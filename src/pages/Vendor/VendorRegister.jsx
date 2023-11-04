@@ -3,6 +3,9 @@ import { ToastContainer, toast } from "react-toastify";
 import { toastTheme } from "../../components/toast";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const VendorRegister = () => {
   const [email, setEmail] = useState("");
@@ -11,6 +14,27 @@ const VendorRegister = () => {
   const [vendor_name, setVendorName] = useState("");
   const [vendor_location, setVendorLocation] = useState("");
   const [contact, setContact] = useState("");
+
+  const navigate = useNavigate();
+
+  const registerMutation = async (payload) => {
+    const response = await axios.post(
+      import.meta.env.VITE_api_url + "vendor-auth/register",
+      payload
+    );
+    return response.data;
+  };
+
+  const mutation = useMutation({
+    mutationFn: registerMutation,
+    onSuccess: (data) => {
+      toast.success(data.message, toastTheme);
+      setTimeout(() => navigate("/vendor/login"), 300);
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -44,10 +68,19 @@ const VendorRegister = () => {
     if (contact.length < 10 || !contact.startsWith("9")) {
       return toast.error("Invalid contact number", toastTheme);
     }
-    return toast.success("Register", toastTheme);
+
+    const payload = {
+      email,
+      password,
+      vendor_name,
+      vendor_location,
+      contact,
+    };
+
+    mutation.mutate(payload);
   };
   return (
-    <div className="hero bg-base-200 pt-20">
+    <div className="hero pt-20">
       <ToastContainer />
       <div className="hero-content flex-col lg:flex-row items-center justify-between gap-[20rem]">
         <div className="text-center lg:text-left w-full">
