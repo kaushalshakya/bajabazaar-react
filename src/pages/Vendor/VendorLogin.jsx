@@ -7,6 +7,7 @@ import axios from "axios";
 import useAuthStore from "../../global/authStore";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const VendorLogin = () => {
   const [email, setEmail] = useState("");
@@ -102,9 +103,11 @@ const VendorLogin = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <label className="label">
-                <a href="#" className="label-text-alt link link-hover">
-                  Forgot password?
-                </a>
+                <Link to={"/login"}>
+                  <a href="#" className="label-text-alt link link-hover">
+                    Login as Customer
+                  </a>
+                </Link>
               </label>
             </div>
             <div className="form-control mt-6">

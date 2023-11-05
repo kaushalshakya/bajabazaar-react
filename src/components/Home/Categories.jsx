@@ -11,6 +11,7 @@ const Categories = () => {
       const response = await axios.get(
         import.meta.env.VITE_api_url + "category"
       );
+      console.log(response.data);
       return response.data.data;
     },
   });
@@ -21,7 +22,7 @@ const Categories = () => {
       {isLoading && <Loader />}
       {error && <Error message={error.message} />}
       <div className="carousel rounded-box w-full">
-        {data &&
+        {data ? (
           data.map((category) => (
             <div
               key={category.id}
@@ -38,7 +39,10 @@ const Categories = () => {
               />
               <h1 className="text-lg font-bold">{category.category_name}</h1>
             </div>
-          ))}
+          ))
+        ) : (
+          <Loader />
+        )}
       </div>
     </div>
   );

@@ -60,7 +60,10 @@ const Navbar = ({ children }) => {
             <div className="flex-none hidden items-center font-bold lg:flex gap-5 px-5">
               {user ? (
                 <Link to={"/profile"}>
-                  <p className="text-primary">{user.user_fullname}</p>
+                  <p className="text-primary">
+                    <span className="font-normal">Hello</span>{" "}
+                    {user.role === 1 ? user.firstName : user.vendor_name}
+                  </p>
                 </Link>
               ) : (
                 <Link to={"/register"}>
@@ -85,7 +88,7 @@ const Navbar = ({ children }) => {
                   </label>
                   <ul
                     tabIndex={0}
-                    className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content text-primary rounded-box w-52"
+                    className="mt-3 z-30 p-2 shadow menu menu-sm dropdown-content text-primary rounded-box w-52"
                   >
                     <li>
                       <Link to={"/profile"}>

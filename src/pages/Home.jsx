@@ -5,7 +5,7 @@ import ProductList from "../components/Home/ProductList";
 
 const Home = () => {
   return (
-    <div className="flex flex-col gap-14 py-10 px-20">
+    <div className="flex flex-col gap-14 py-10 px-20 items-center">
       <Banner />
       <div className="divider"></div>
       <Categories />

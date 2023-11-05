@@ -34,7 +34,6 @@ const ConfirmLogout = ({ setLogout }) => {
       setUser(null);
       setIsAuthenticated(false);
       setToken(null);
-      setIsAuthenticated(false);
       toast.success(data.message, toastTheme);
       setTimeout(() => {
         navigate("/", 3000);

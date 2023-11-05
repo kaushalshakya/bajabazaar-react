@@ -7,6 +7,7 @@ import Register from "../pages/Customer/Register";
 import Login from "../pages/Customer/Login";
 import VendorLogin from "../pages/Vendor/VendorLogin";
 import VendorRegister from "../pages/Vendor/VendorRegister";
+import Profile from "../pages/Profile";
 
 const Routes = () => {
   return (
@@ -21,6 +22,7 @@ const Routes = () => {
             <Route path="login" element={<VendorLogin />}></Route>
             <Route path="register" element={<VendorRegister />}></Route>
           </Route>
+          <Route path="/profile" element={<Profile />}></Route>
         </Endpoints>
       </Navbar>
     </div>
