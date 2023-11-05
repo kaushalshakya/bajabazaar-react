@@ -11,15 +11,17 @@ const Categories = () => {
       const response = await axios.get(
         import.meta.env.VITE_api_url + "category"
       );
-      console.log(response.data);
+      console.log(response.data.data);
       return response.data.data;
     },
   });
 
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <div className="flex flex-col gap-5 items-center">
       <h1 className="text-3xl font-bold">Our Categories</h1>
-      {isLoading && <Loader />}
       {error && <Error message={error.message} />}
       <div className="carousel rounded-box w-full">
         {data ? (
