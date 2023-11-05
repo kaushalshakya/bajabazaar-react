@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Loader from "../Loader";
 import Error from "../Error";
+import defaultProfile from "/defaultProfile.jpg";
 
 const UserDetail = () => {
   const user = useAuthStore((state) => state.user);
@@ -32,7 +33,11 @@ const UserDetail = () => {
   return (
     <div className="flex flex-col gap-5 items-center p-5 bg-base-200">
       <div className="rounded-full">
-        <img src={user.image} alt="image" className="rounded-full" />
+        <img
+          src={user.image ? user.image : defaultProfile}
+          alt="image"
+          className="rounded-full w-20 h-20"
+        />
       </div>
       <div className="divider"></div>
       <ul className="flex flex-col gap-5 font-semibold text-lg items-start justify-between">
