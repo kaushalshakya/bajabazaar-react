@@ -3,6 +3,9 @@ import { ToastContainer, toast } from "react-toastify";
 import { toastTheme } from "../../components/toast";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -11,6 +14,27 @@ const Register = () => {
   const [last_name, setLastName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [contact, setContact] = useState("");
+
+  const navigate = useNavigate();
+
+  const registerUser = async (payload) => {
+    const response = await axios.post(
+      import.meta.env.VITE_api_url + "customer-auth/register",
+      payload
+    );
+    return response.data;
+  };
+
+  const mutation = useMutation({
+    mutationFn: registerUser,
+    onSuccess: (data) => {
+      console.log(data);
+      toast.success("User registered successfully", toastTheme);
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+    },
+  });
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -45,7 +69,17 @@ const Register = () => {
     if (contact.length < 10 || !contact.startsWith("9")) {
       return toast.error("Invalid contact number", toastTheme);
     }
-    return toast.success("Register", toastTheme);
+
+    const payload = {
+      email,
+      first_name,
+      last_name,
+      password,
+      confirm_password: confirmPassword,
+      contact,
+    };
+
+    mutation.mutate(payload);
   };
   return (
     <div className="hero ">

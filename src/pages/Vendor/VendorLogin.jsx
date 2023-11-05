@@ -37,7 +37,6 @@ const VendorLogin = () => {
       }, 3000);
     },
     onError: (error) => {
-      console.log("jere");
       console.log(error);
       toast.error(error.response.data.message, toastTheme);
     },
