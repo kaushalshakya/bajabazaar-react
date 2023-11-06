@@ -5,11 +5,15 @@ import Cart from "./Cart";
 import useAuthStore from "../global/authStore";
 import defaultProfile from "/defaultProfile.jpg";
 import ConfirmLogout from "./ConfirmLogout";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ children }) => {
   const [logout, setLogout] = useState(false);
   const user = useAuthStore((state) => state.user);
   console.log(user);
+
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="drawer flex flex-col max-w-screen">
@@ -75,7 +79,9 @@ const Navbar = ({ children }) => {
                   </button>
                 </Link>
               )}
-              <Cart />
+              <div onClick={() => navigate("/cart")}>
+                <Cart />
+              </div>
               {user ? (
                 <div className="dropdown dropdown-end">
                   <label

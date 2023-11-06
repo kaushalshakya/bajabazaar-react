@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "../Loader";
 import Error from "../Error";
+import { useMutation } from "@tanstack/react-query";
+import useAuthStore from "../../global/authStore";
+import { ToastContainer, toast } from "react-toastify";
+import { toastTheme } from "../toast";
 
 const ProductList = () => {
+  const [product, setProduct] = useState(null);
   const { data, error, isLoading } = useQuery({
     queryKey: ["getHomeProducts"],
     queryFn: async () => {
@@ -13,7 +18,40 @@ const ProductList = () => {
       return response.data.products;
     },
   });
-  console.log(data);
+
+  const token = useAuthStore((state) => state.token);
+
+  const addToCart = async (id) => {
+    const response = await axios.post(
+      import.meta.env.VITE_api_url + "cart",
+      {
+        product_id: id,
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return response.data;
+  };
+
+  const mutation = useMutation({
+    mutationFn: addToCart,
+    onSuccess: (data) => {
+      console.log(data);
+      toast.success(data.message, toastTheme);
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+
+  const handleAddToCart = (product) => {
+    console.log(product);
+    if (!token) {
+      return toast.error("You need to log in first", toastTheme);
+    }
+
+    mutation.mutate(product.id);
+  };
+
   return (
     <div className="flex flex-col gap-5 items-center">
       <h1 className="text-3xl font-bold">Our Products</h1>
@@ -48,7 +86,17 @@ const ProductList = () => {
                   </div>
                   <p>Rs. {product.product_price}</p>
                   <div className="card-actions justify-end">
-                    <button className="btn btn-primary">Add to Cart</button>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setProduct(product);
+                        handleAddToCart(product);
+                      }}
+                    >
+                      Add to Cart
+                    </button>
                   </div>
                 </div>
               </div>
@@ -58,6 +106,7 @@ const ProductList = () => {
           <Loader />
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };

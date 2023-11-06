@@ -4,7 +4,7 @@ import UserDetail from "../components/Profile/UserDetail";
 import useAuthStore from "../global/authStore";
 
 const Profile = () => {
-  const [radio, setRadio] = useState("Products");
+  const [radio, setRadio] = useState("Profile");
   const handleChange = (e) => {
     setRadio(e.target.value);
   };
