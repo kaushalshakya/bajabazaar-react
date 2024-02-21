@@ -7,7 +7,8 @@ import Loader from "./Loader";
 import Error from "./Error";
 
 const Cart = () => {
-  const token = useAuthStore((state) => state.token);
+  const token =
+    useAuthStore((state) => state.token) || localStorage.getItem("token");
   const { isLoading, error, data, refetch } = useQuery({
     queryKey: ["getCart"],
     queryFn: async () => {

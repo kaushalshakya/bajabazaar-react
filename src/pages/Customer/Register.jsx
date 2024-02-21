@@ -176,7 +176,7 @@ const Register = () => {
             </div>
             <div className="form-control mt-6">
               <button className="btn btn-primary" onClick={handleRegister}>
-                Login
+                Register
               </button>
             </div>
           </form>

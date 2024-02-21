@@ -35,9 +35,6 @@ const ConfirmLogout = ({ setLogout }) => {
       setIsAuthenticated(false);
       setToken(null);
       toast.success(data.message, toastTheme);
-      setTimeout(() => {
-        navigate("/", 3000);
-      });
     },
     onError: (error) => {
       toast.error(error.response.data.message, toastTheme);
@@ -46,6 +43,7 @@ const ConfirmLogout = ({ setLogout }) => {
 
   const handleLogout = () => {
     mutation.mutate();
+    localStorage.clear();
     setLogout(false);
     setTimeout(() => {
       navigate("/");

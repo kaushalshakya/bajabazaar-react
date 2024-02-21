@@ -8,7 +8,8 @@ const Profile = () => {
   const handleChange = (e) => {
     setRadio(e.target.value);
   };
-  const token = useAuthStore((state) => state.token);
+  const token =
+    useAuthStore((state) => state.token) || localStorage.getItem("token");
 
   if (!token) {
     return <h1>Unauthenticated</h1>;

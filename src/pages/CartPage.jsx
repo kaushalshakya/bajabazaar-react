@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useAuthStore from "../global/authStore";
 import { useQuery } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -7,14 +7,11 @@ import Error from "../components/Error";
 import axios from "axios";
 
 const CartPage = () => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
   const token = useAuthStore((state) => state.token);
+  const isAuthenticated = !!token;
 
-  if (!token) {
-    return <div>Unauthenticated</div>;
-  }
-
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, error, data, refetch } = useQuery({
     queryKey: ["getCart"],
     queryFn: async () => {
       const response = await axios.get(import.meta.env.VITE_api_url + "cart", {
@@ -22,7 +19,12 @@ const CartPage = () => {
       });
       return response.data;
     },
+    enabled: isAuthenticated,
   });
+
+  if (!isAuthenticated) {
+    return <div>Unauthenticated</div>;
+  }
 
   if (isLoading) {
     return <Loader />;
@@ -32,18 +34,39 @@ const CartPage = () => {
     return <Error message={error.message} />;
   }
 
-  console.log("cart page", data.data);
-
   const totalAmount = data.data.reduce((accumulator, currentVal) => {
     return accumulator + parseInt(currentVal.total_amount);
   }, 0);
 
-  console.log(count + 1);
+  const updateCart = async (id, quantity, product_id) => {
+    console.log({ id, quantity });
+    const response = await axios.put(
+      import.meta.env.VITE_api_url + "cart",
+      {
+        cart_id: id,
+        quantity,
+        product_id,
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return response.data;
+  };
+  const deleteCart = async (id) => {
+    const response = await axios.delete(
+      import.meta.env.VITE_api_url + `cart/${id}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return response.data;
+  };
 
-  const updateCart = (id, quantity) => {};
-  const deleteCart = (id, quantity) => {};
   const mutation = useMutation({
-    mutationFn: count + 1 > 0 ? updateCart : deleteCart,
+    mutationFn: (data) => {
+      const { id, quantity, product_id } = data;
+      console.log({ data });
+      return quantity > 0
+        ? updateCart(id, quantity, product_id)
+        : deleteCart(id);
+    },
     onSuccess: (data) => {
       console.log(data);
     },
@@ -52,9 +75,43 @@ const CartPage = () => {
     },
   });
 
+  const incrementQuantity = useCallback(
+    (content) => {
+      const updatedQuantity = content.quantity + 1;
+      console.log({ content });
+      setCount(updatedQuantity);
+      mutation.mutate({
+        id: content.id,
+        quantity: updatedQuantity,
+        product_id: content.product.id,
+      });
+    },
+    [mutation]
+  );
+
+  const decrementQuantity = useCallback(
+    (content) => {
+      const updatedQuantity = content.quantity - 1;
+      setCount(updatedQuantity);
+      mutation.mutate({
+        id: content.id,
+        quantity: updatedQuantity,
+        product_id: content.product.id,
+      });
+    },
+    [mutation]
+  );
+
+  useEffect(() => {
+    refetch();
+  }, [count, incrementQuantity, decrementQuantity, refetch]);
+
   return (
     <div className="overflow-x-auto py-10 px-20 flex flex-col gap-10">
-      <div className="font-bold text-2xl"> Total: {totalAmount}</div>
+      <div className="flex justify-between items-center">
+        <div className="font-bold text-2xl"> Total: {totalAmount}</div>
+        <button className="btn btn-primary">Checkout</button>
+      </div>
       <table className="table">
         <thead>
           <tr>
@@ -68,7 +125,7 @@ const CartPage = () => {
         </thead>
         <tbody>
           {data.data.map((content) => (
-            <tr>
+            <tr key={content.product.id}>
               <td>
                 <div className="flex items-center space-x-3">
                   <div className="avatar">
@@ -90,18 +147,14 @@ const CartPage = () => {
               <td className="flex items-center gap-5">
                 <p
                   className="font-bold text-lg cursor-pointer"
-                  onClick={() => {
-                    setCount(content.quantity--);
-                  }}
+                  onClick={() => decrementQuantity(content)}
                 >
                   -
                 </p>
                 {content.quantity}
                 <p
                   className="font-bold text-lg cursor-pointer"
-                  onClick={() => {
-                    setCount(content.quantity++);
-                  }}
+                  onClick={() => incrementQuantity(content)}
                 >
                   +
                 </p>

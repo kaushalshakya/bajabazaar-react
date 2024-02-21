@@ -13,7 +13,8 @@ const AddProduct = ({ setAddForm }) => {
   const [productDescription, setProductDescription] = useState("");
   const [productImage, setProductImage] = useState(null);
   const [productCategory, setProductCategory] = useState("");
-  const token = useAuthStore((state) => state.token);
+  const token =
+    useAuthStore((state) => state.token) || localStorage.getItem("token");
 
   const addProductMutation = async (payload) => {
     const response = await axios.post(

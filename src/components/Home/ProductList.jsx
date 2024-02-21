@@ -19,7 +19,8 @@ const ProductList = () => {
     },
   });
 
-  const token = useAuthStore((state) => state.token);
+  const token =
+    useAuthStore((state) => state.token) || localStorage.getItem("token");
 
   const addToCart = async (id) => {
     const response = await axios.post(

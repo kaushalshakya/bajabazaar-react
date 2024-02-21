@@ -7,8 +7,11 @@ import Error from "../Error";
 import defaultProfile from "/defaultProfile.jpg";
 
 const UserDetail = () => {
-  const user = useAuthStore((state) => state.user);
-  const token = useAuthStore((state) => state.token);
+  const user =
+    useAuthStore((state) => state.user) ||
+    JSON.parse(localStorage.getItem("user"));
+  const token =
+    useAuthStore((state) => state.token) || localStorage.getItem("token");
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["getProfile"],

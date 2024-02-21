@@ -31,7 +31,9 @@ const VendorLogin = () => {
       const user = jwtDecode(data.accessToken);
       setIsAuthenticated(true);
       setToken(data.accessToken);
+      localStorage.setItem("token", data.accessToken);
       setUser(user);
+      localStorage.setItem(JSON.stringify("user", user));
       setTimeout(() => {
         navigate("/");
       }, 3000);

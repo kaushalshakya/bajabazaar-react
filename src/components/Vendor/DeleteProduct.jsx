@@ -8,7 +8,8 @@ import axios from "axios";
 
 const DeleteProduct = ({ setDeleteProduct, toDelete }) => {
   console.log(toDelete);
-  const token = useAuthStore((state) => state.token);
+  const token =
+    useAuthStore((state) => state.token) || localStorage.getItem("token");
 
   const deleteProduct = async (id) => {
     const response = await axios.delete(

@@ -30,8 +30,10 @@ const Login = () => {
       toast.success(data.message, toastTheme);
       setIsAuthenticated(true);
       setToken(data.accessToken);
+      localStorage.setItem("token", data.accessToken);
       const user = jwtDecode(data.accessToken);
       setUser(user);
+      localStorage.setItem("user", JSON.stringify(user));
       setTimeout(() => {
         navigate("/");
       }, 3000);

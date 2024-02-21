@@ -16,7 +16,8 @@ const ProductProfile = () => {
   const [deleteProduct, setDeleteProduct] = useState(false);
   const [toDelete, setToDelete] = useState(null);
 
-  const token = useAuthStore((state) => state.token);
+  const token =
+    useAuthStore((state) => state.token) || localStorage.getItem("token");
   const { isLoading, error, data, refetch } = useQuery({
     queryKey: ["vendorProducts"],
     queryFn: async () => {

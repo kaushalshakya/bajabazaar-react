@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ children }) => {
   const [logout, setLogout] = useState(false);
-  const user = useAuthStore((state) => state.user);
+  const user = JSON.parse(localStorage.getItem("user"));
   console.log(user);
 
   const navigate = useNavigate();
@@ -79,9 +79,11 @@ const Navbar = ({ children }) => {
                   </button>
                 </Link>
               )}
-              <div onClick={() => navigate("/cart")}>
-                <Cart />
-              </div>
+              {user && user.role === 1 && (
+                <div onClick={() => navigate("/cart")}>
+                  <Cart />
+                </div>
+              )}
               {user ? (
                 <div className="dropdown dropdown-end">
                   <label
